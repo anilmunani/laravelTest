@@ -101,7 +101,10 @@ class EventsController extends BaseController
      */
 
     public function getEventsWithWorkshops() {
-        throw new \Exception('implement in coding task 1');
+        $events=Events::with('workshop')->get();
+        $workshops=Workshops::with('events')->get();
+
+        return compact('events','workshops');
     }
 
 
@@ -179,7 +182,15 @@ class EventsController extends BaseController
     ```
      */
 
-    public function getFutureEventsWithWorkshops() {
-        throw new \Exception('implement in coding task 2');
+    public function getFutureEventsWithWorkshops() 
+    {
+       $upcevents = larademodb::table('events')
+           ->join('workshop','events.id','=','workshops.event_id')
+           ->where('start','>=',date('Y-m-d'))
+           ->get();
+                      
+        //$workshops=Workshops::with('events')->get();
+
+        return compact('upcevents');
     }
 }
